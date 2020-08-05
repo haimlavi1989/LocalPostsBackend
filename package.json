@@ -1,0 +1,26 @@
+{
+  "name": "localpostsbackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haimlavi1989/LocalPostsBackend.git"
+  },
+  "author": "Haim Lavi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haimlavi1989/LocalPostsBackend/issues"
+  },
+  "homepage": "https://github.com/haimlavi1989/LocalPostsBackend#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "prettier": "2.0.5"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
