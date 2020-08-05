@@ -1,0 +1,48 @@
+[
+
+    {  
+      "id": 1,
+      "title": "Rent",
+      "img": "rent.png"
+    },
+    {   
+      "id": 2,
+      "title": "Sale",
+      "img": "sale.png"
+    },
+    {   
+      "id": 3,
+      "title": "Share knolage",
+      "img": "share_knowledge_icon.png"
+    },
+    {
+      "id": 4,
+      "title": "Handing",
+      "img": "handing_icon.png"
+    },
+    {
+      "id": 5,
+      "title": "Dating",
+      "img": "dating.png"
+    },
+    {
+      "id": 6,
+      "title": "Lost",
+      "img": "lost.png"
+    },
+    {
+      "id": 7,
+      "title": "Partners",
+      "img": "partners.png"
+    },
+
+    {
+      "id": 8,
+      "title": "Ask for advice",
+      "img": "ask_qusteen_icon.png"
+    }
+
+  ]   
+  
+  
+  
