@@ -30,8 +30,6 @@ app.get('/api/v1/posts/:id', (req, res) => {
   const post = posts.find((el) => {
     return el.id === id;
   });
-  console.log(post);
-  console.log(id);
   res.status(200).json({
     status: 'success',
     data: {
@@ -51,6 +49,53 @@ app.post('/api/v1/posts', (req, res) => {
     data: {
       post: NewPost,
     },
+  });
+});
+
+app.patch('/api/v1/posts/:id', (req, res) => {
+  const id = req.params.id * 1;
+  if (id > posts.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'invalid id',
+    });
+  }
+
+  const index = posts.findIndex((el) => {
+    return el.id === id;
+  });
+
+  const post = posts[index];
+  const updatePost = Object.assign(post, req.body);
+  posts[index] = updatePost;
+  fs.writeFile(postsDataPath, JSON.stringify(posts), (err) => {});
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      post: updatePost,
+    },
+  });
+});
+
+app.delete('/api/v1/posts/:id', (req, res) => {
+  const id = req.params.id * 1;
+  if (id > posts.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'invalid id',
+    });
+  }
+  const index = posts.findIndex((el) => {
+    return el.id === id;
+  });
+
+  posts.splice(index, 1);
+  fs.writeFile(postsDataPath, JSON.stringify(posts), (err) => {});
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
   });
 });
 
