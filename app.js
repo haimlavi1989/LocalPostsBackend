@@ -9,6 +9,7 @@ app.use(express.json());
 const port = 3000;
 postsDataPath = `${__dirname}/dev-data/data/posts.json`;
 const posts = JSON.parse(fs.readFileSync(postsDataPath));
+const postsRoutes = express.Router();
 
 const getAllPosts = (req, res) => {
   res.status(200).json({
@@ -99,13 +100,10 @@ const deletePost = (req, res) => {
   });
 };
 
-app.route('/api/v1/posts').get(getAllPosts).post(addNewPost);
+postsRoutes.route('/').get(getAllPosts).post(addNewPost);
+postsRoutes.route('/:id').get(getPost).patch(updatePost).delete(deletePost);
 
-app
-  .route('/api/v1/posts/:id')
-  .get(getPost)
-  .patch(updatePost)
-  .delete(deletePost);
+app.use('/api/v1/posts', postsRoutes);
 
 app.listen(port, () => {
   console.log(`running on port:${port}`);
