@@ -10,16 +10,16 @@ const port = 3000;
 postsDataPath = `${__dirname}/dev-data/data/posts.json`;
 const posts = JSON.parse(fs.readFileSync(postsDataPath));
 
-app.get('/api/v1/posts', (req, res) => {
+const getAllPosts = (req, res) => {
   res.status(200).json({
     status: 'success',
     data: {
       posts,
     },
   });
-});
+};
 
-app.get('/api/v1/posts/:id', (req, res) => {
+const getPost = (req, res) => {
   const id = req.params.id * 1;
   if (id > posts.length) {
     return res.status(404).json({
@@ -36,9 +36,9 @@ app.get('/api/v1/posts/:id', (req, res) => {
       post,
     },
   });
-});
+};
 
-app.post('/api/v1/posts', (req, res) => {
+const addNewPost = (req, res) => {
   NewId = posts[posts.length - 1].id + 1;
   NewPost = Object.assign({ id: NewId }, req.body);
   posts.push(NewPost);
@@ -50,9 +50,9 @@ app.post('/api/v1/posts', (req, res) => {
       post: NewPost,
     },
   });
-});
+};
 
-app.patch('/api/v1/posts/:id', (req, res) => {
+const updatePost = (req, res) => {
   const id = req.params.id * 1;
   if (id > posts.length) {
     return res.status(404).json({
@@ -76,9 +76,9 @@ app.patch('/api/v1/posts/:id', (req, res) => {
       post: updatePost,
     },
   });
-});
+};
 
-app.delete('/api/v1/posts/:id', (req, res) => {
+const deletePost = (req, res) => {
   const id = req.params.id * 1;
   if (id > posts.length) {
     return res.status(404).json({
@@ -97,7 +97,15 @@ app.delete('/api/v1/posts/:id', (req, res) => {
     status: 'success',
     data: null,
   });
-});
+};
+
+app.route('/api/v1/posts').get(getAllPosts).post(addNewPost);
+
+app
+  .route('/api/v1/posts/:id')
+  .get(getPost)
+  .patch(updatePost)
+  .delete(deletePost);
 
 app.listen(port, () => {
   console.log(`running on port:${port}`);
