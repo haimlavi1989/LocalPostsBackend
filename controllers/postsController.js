@@ -3,6 +3,17 @@ const fs = require('fs');
 dataPath = `${__dirname}/../dev-data/data/posts.json`;
 const posts = JSON.parse(fs.readFileSync(dataPath));
 
+exports.checkId = (req, res, next, val) => {
+  if (req.params.id > posts.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'invalid id',
+    });
+  }
+
+  next();
+};
+
 exports.getAllPosts = (req, res) => {
   res.status(200).json({
     status: 'success',
@@ -14,15 +25,11 @@ exports.getAllPosts = (req, res) => {
 
 exports.getPost = (req, res) => {
   const id = req.params.id * 1;
-  if (id > posts.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'invalid id',
-    });
-  }
+
   const post = posts.find((el) => {
     return el.id === id;
   });
+
   res.status(200).json({
     status: 'success',
     data: {
@@ -47,12 +54,6 @@ exports.addNewPost = (req, res) => {
 
 exports.updatePost = (req, res) => {
   const id = req.params.id * 1;
-  if (id > posts.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'invalid id',
-    });
-  }
 
   const index = posts.findIndex((el) => {
     return el.id === id;
@@ -73,12 +74,7 @@ exports.updatePost = (req, res) => {
 
 exports.deletePost = (req, res) => {
   const id = req.params.id * 1;
-  if (id > posts.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'invalid id',
-    });
-  }
+
   const index = posts.findIndex((el) => {
     return el.id === id;
   });
