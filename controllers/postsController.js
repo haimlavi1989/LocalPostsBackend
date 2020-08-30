@@ -1,20 +1,8 @@
-const fs = require('fs');
+const Post = require('./../models/postsModel');
 
-dataPath = `${__dirname}/../dev-data/data/posts.json`;
-const posts = JSON.parse(fs.readFileSync(dataPath));
+exports.getAllPosts = async (req, res) => {
+  const posts = await Post.find();
 
-exports.checkId = (req, res, next, val) => {
-  if (req.params.id > posts.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'invalid id',
-    });
-  }
-
-  next();
-};
-
-exports.getAllPosts = (req, res) => {
   res.status(200).json({
     status: 'success',
     data: {
@@ -23,12 +11,8 @@ exports.getAllPosts = (req, res) => {
   });
 };
 
-exports.getPost = (req, res) => {
-  const id = req.params.id * 1;
-
-  const post = posts.find((el) => {
-    return el.id === id;
-  });
+exports.getPost = async (req, res) => {
+  const post = await Post.findById(req.params.id);
 
   res.status(200).json({
     status: 'success',
@@ -38,31 +22,21 @@ exports.getPost = (req, res) => {
   });
 };
 
-exports.addNewPost = (req, res) => {
-  NewId = posts[posts.length - 1].id + 1;
-  NewPost = Object.assign({ id: NewId }, req.body);
-  posts.push(NewPost);
-  fs.writeFile(dataPath, JSON.stringify(posts), (err) => {});
+exports.createPost = async (req, res) => {
+  const newPost = await Post.create(req.body);
+
   res.status(201).json({
     status: 'success',
-    results: posts.length,
     data: {
-      post: NewPost,
+      post: newPost,
     },
   });
 };
 
-exports.updatePost = (req, res) => {
-  const id = req.params.id * 1;
-
-  const index = posts.findIndex((el) => {
-    return el.id === id;
+exports.updatePost = async (req, res) => {
+  const updatePost = await Post.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
   });
-
-  const post = posts[index];
-  const updatePost = Object.assign(post, req.body);
-  posts[index] = updatePost;
-  fs.writeFile(dataPath, JSON.stringify(posts), (err) => {});
 
   res.status(200).json({
     status: 'success',
@@ -72,16 +46,8 @@ exports.updatePost = (req, res) => {
   });
 };
 
-exports.deletePost = (req, res) => {
-  const id = req.params.id * 1;
-
-  const index = posts.findIndex((el) => {
-    return el.id === id;
-  });
-
-  posts.splice(index, 1);
-  fs.writeFile(dataPath, JSON.stringify(posts), (err) => {});
-
+exports.deletePost = async (req, res) => {
+  const newPost = await Post.findByIdAndDelete(req.params.id);
   res.status(204).json({
     status: 'success',
     data: null,
