@@ -12,10 +12,12 @@ const pointSchema = new mongoose.Schema({
   },
 });
 
+const ObjectId = mongoose.Schema.ObjectId;
+
 const postsSchema = new mongoose.Schema({
   subject: {
     type: String,
-    require: [true, 'A post must have title'],
+    required: [true, 'A post must have title'],
   },
   imageCover: {
     type: String,
@@ -24,7 +26,7 @@ const postsSchema = new mongoose.Schema({
   images: [String],
   description: {
     type: String,
-    require: [true, 'A post must have text'],
+    required: [true, 'A post must have text'],
   },
   publishDate: {
     type: Date,
@@ -37,6 +39,10 @@ const postsSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
+    select: false,
+  },
+  createdBy: {
+    type: ObjectId,
     select: false,
   },
 });
