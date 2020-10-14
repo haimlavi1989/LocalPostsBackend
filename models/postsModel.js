@@ -43,6 +43,7 @@ const postsSchema = new mongoose.Schema({
   },
   createdBy: {
     type: ObjectId,
+    ref: 'User',
     select: false,
   },
 });
