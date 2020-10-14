@@ -21,4 +21,10 @@ Router.route('/:id')
     postsController.deletePost
   );
 
+// /distances?distance=233&center=-40,45&unit=km
+// /distances/233/center/-40,45/unit/km
+Router.route('/distances/:distance/center/:latlng/unit/:unit').get(
+  postsController.getDistances
+);
+
 module.exports = Router;
