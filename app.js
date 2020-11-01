@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const compression = require('compression');
 
 // Start express app
 const app = express();
@@ -24,6 +25,8 @@ app.use(mongoSanitize());
 app.use(xss());
 // Preventing Parameter Pollution
 app.use(hpp());
+// Compress code for production
+app.use(compression());
 
 // Routes
 app.use('/api/v1/posts', postsRoutes);
