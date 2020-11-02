@@ -21,6 +21,7 @@ const createSendToken = (user, statusCode, req, res) => {
   res.status(statusCode).json({
     status: 'success',
     token,
+    expiresIn: process.env.JWT_EXPIRES_IN,
     data: {
       user,
     },
@@ -63,6 +64,7 @@ exports.login = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       token,
+      expiresIn: process.env.JWT_EXPIRES_IN
     });
   } catch (err) {
     return next(new AppError(err, 400));
