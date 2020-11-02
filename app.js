@@ -8,6 +8,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const compression = require('compression');
+const cors = require('cors');
 
 // Start express app
 const app = express();
@@ -16,6 +17,14 @@ const app = express();
 app.use(express.json());
 
 // ****** Security ******
+
+// Implement CORS
+app.use(cors());
+// Access-Control-Allow-Origin *
+// app.use(cors({
+//   origin: 'https://localposts.web.app'
+// }))
+app.options('*', cors());
 
 // Set security HTTP headers
 app.use(helmet());
