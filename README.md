@@ -34,7 +34,7 @@ JWT_EXPIRES_IN=<jwt_expires_in>
 ## Available Routes
 
 #### **POST** `/api/v1/posts`
-* Used for add new user post. Accepts:
+* add a new post message. Requires a valid JWT with admin or user scope. Accepts:
 ```
       "subject": "Losts & Founds",
       "photo": "",
@@ -50,7 +50,7 @@ Returns a JWT
 * Returns a specific `post` in the database.
 
 #### **PATCH** `/api/v1/posts` 
-* Updates a posts. Requires a valid JWT. with `admin` or `user` scope.
+* Updates a posts. Requires a valid JWT with `admin` or `user` scope.
 
 #### **DELETE** `/api/v1/posts/{id}`
 * Deletes a post with a specific `id`. Requires a valid JWT with `admin` or `user` scope.
