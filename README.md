@@ -3,9 +3,9 @@
 The backEnd part for showing local posts of people around your location.
 Built using modern technologies: node.js, express, mongoDB, mongoose
 
-## Demo API
+## Demo application
 
-The API is served at **https://localpostsbackend.herokuapp.com/api/v1/posts**
+The application is served at **https://localpostsbackend.herokuapp.com/api/v1/posts**
 
 ## Installation and Running the App
 
