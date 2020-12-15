@@ -4,6 +4,8 @@ class APIFeatures {
     this.queryString = queryString;
   }
 
+  // /api/v1/title=X-Men
+  // /api/v1/_id[gte]=112233
   filter() {
     const queryObj = { ...this.queryString };
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
@@ -17,28 +19,27 @@ class APIFeatures {
     return this;
   }
 
+  // /api/v1/movies?sort=filedname
   sort() {
     if (this.queryString && this.queryString.sort) {
       const sortBy = this.queryString.sort.split(',').join(' ');
       this.query = this.query.sort(sortBy);
-    } else {
-      this.query = this.query.sort('-createdAt');
-    }
+    } 
 
     return this;
   }
 
+  // /api/v1/movies?fields=fild1,fild2
   limitFields() {
     if (this.queryString.fields) {
       const fields = this.queryString.fields.split(',').join(' ');
       this.query = this.query.select(fields);
-    } else {
-      this.query = this.query.select('-__v');
-    }
+    } 
 
     return this;
   }
 
+  // /api/v1/movies?page=2&limit=5
   paginate() {
     if (this.queryString.page) {
       const page = this.queryString.page * 1 || 1;

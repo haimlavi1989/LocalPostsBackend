@@ -7,7 +7,9 @@ const authController = require('./../controllers/authController');
 
 Router.route('/')
   .get(postsController.getAllPosts)
-  .post(authController.protect, postsController.createPost);
+  .post(authController.protect,
+     authController.restrictTo('user', 'admin'),
+     postsController.createPost);
 Router.route('/:id')
   .get(postsController.getPost)
   .patch(
