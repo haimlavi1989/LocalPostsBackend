@@ -1,7 +1,18 @@
 
 # LocalPostsBackend
 The backEnd part for showing local posts of people around your location.
-Built using modern technologies: node.js, express, mongoDB, mongoose
+Built using modern technologies: node.js, express, mongoDB, mongoose.
+
+-RESTful API design and development with advanced features: filtering, sorting, pagination
+-Complete modern authentication with JWT: user sign up, log in, password reset.
+-Authorization (user roles).
+-Security: best practices, encryption, sanitization, rate limiting.
+-Using the MVC (Model-View-Controller) architecture.
+-Express: routing, middleware, sending responses.
+-Mongoose: Data models, CRUD operations, data validation, and middleware.
+-Advanced Mongoose features: modeling geospatial data.
+-Uploading files and image processing.
+-Sending emails with Mailtrap and Sendgrid.
 
 ## Demo API
 
