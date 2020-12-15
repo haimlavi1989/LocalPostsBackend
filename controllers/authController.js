@@ -7,7 +7,7 @@ const crypto = require('crypto');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+    expiresIn: process.env.JWT_EXPIRES_IN_SECONDS,
   });
 };
 
@@ -21,7 +21,7 @@ const createSendToken = (user, statusCode, req, res) => {
   res.status(statusCode).json({
     status: 'success',
     token,
-    expiresIn: process.env.JWT_EXPIRES_IN,
+    expiresIn: process.env.JWT_EXPIRES_IN_SECONDS,
     data: {
       user,
     },
@@ -59,12 +59,12 @@ exports.login = async (req, res, next) => {
       return next(new AppError('Incorrect email or password', 401));
     }
     const token = signToken(user._id);
-
+    let expiresIn = process.env.JWT_EXPIRES_IN_SECONDS.slice(0, -1) * 1;
     //  Send token to client
     res.status(200).json({
       status: 'success',
       token,
-      expiresIn: process.env.JWT_EXPIRES_IN
+      expiresIn 
     });
   } catch (err) {
     return next(new AppError(err, 400));
