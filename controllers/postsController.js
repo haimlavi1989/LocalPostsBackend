@@ -1,7 +1,7 @@
 const Post = require('./../models/postsModel');
 const AppError = require('./../utils/appError');
 const factory = require('./../controllers/handlerFactory');
-const dateFormat = require('dateFormat');
+const dateFormat = require('dateformat');
 const multer = require('multer');
 const { json } = require('body-parser');
 
