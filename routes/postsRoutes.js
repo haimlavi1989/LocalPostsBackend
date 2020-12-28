@@ -2,6 +2,7 @@ const express = require('express');
 const Router = express.Router();
 const postsController = require('./../controllers/postsController');
 const authController = require('./../controllers/authController');
+const file = require("./../middleware/file");
 
 //Router.param('id', postsController.checkId);
 
@@ -9,7 +10,10 @@ Router.route('/')
   .get(postsController.getAllPosts)
   .post(authController.protect,
      authController.restrictTo('user', 'admin'),
-     postsController.createPost);
+     file.uploadPhoto,
+     postsController.createPost,
+     file.resizePhoto,
+     postsController.createPostResponse);
 Router.route('/:id')
   .get(postsController.getPost)
   .patch(

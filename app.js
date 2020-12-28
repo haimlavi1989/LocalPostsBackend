@@ -16,6 +16,9 @@ const app = express();
 // Enable request body
 app.use(express.json());
 
+//Enable static
+app.use('/public', express.static(__dirname + '/public'));
+
 // ****** Security ******
 
 // Implement CORS

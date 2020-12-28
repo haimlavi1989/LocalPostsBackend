@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
+const dateFormat = require('dateformat');
 
 const pointSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['Point'],
     required: true,
+    select: false,
   },
   coordinates: {
     type: [Number],
@@ -30,7 +32,7 @@ const postsSchema = new mongoose.Schema({
   },
   publishDate: {
     type: Date,
-    default: Date.now(),
+    default: Date(),
   },
   location: {
     type: pointSchema,
@@ -38,7 +40,7 @@ const postsSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date(),
     select: false,
   },
   createdBy: {
