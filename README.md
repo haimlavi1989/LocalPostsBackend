@@ -17,7 +17,7 @@ Built using modern technologies: node.js, express, mongoDB, mongoose.
 
 ## Demo API
 
-The API is served at **https://localpostsbackend.herokuapp.com/api/v1/posts**
+The API is served at **<a href="https://localpostsbackend.herokuapp.com/api/v1/posts"></a>**
 
 ## Installation and Running the App
 
