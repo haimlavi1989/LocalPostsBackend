@@ -4,6 +4,7 @@ const factory = require('./../controllers/handlerFactory');
 const dateFormat = require('dateformat');
 const multer = require('multer');
 const { json } = require('body-parser');
+const APIFeatures = require('./../utils/apiFeatures');
 
 exports.getAllPosts = factory.getAll(Post);
 exports.getPost = factory.getOne(Post,);
@@ -81,7 +82,7 @@ exports.getDistances = async (req, res, next) => {
     );
   }
 
-  const distances = await Post.aggregate([
+  distances = await Post.aggregate([
     {
       $geoNear: {
         near: {
@@ -92,28 +93,67 @@ exports.getDistances = async (req, res, next) => {
         maxDistance: distance, //maximum distance in meters
       },
     },
+
+    {
+      $lookup:{
+        from: 'comments',
+        localField: '_id',
+        foreignField: 'post',
+        as: 'posts_comments'
+      }
+    },
+
+    {
+      $lookup:{
+        from: 'likes',
+        localField: '_id',
+        foreignField: 'post',
+        as: 'posts_likes'
+      }
+    },
+
+    {
+      $lookup:{
+        from: "likes",
+        let: { post_item: "$_id" },
+        pipeline: [
+          {"$limit" : 1},
+          { $match:
+              { $expr:
+                { $and:
+                    [
+                      { $eq: [ '$post',  { $convert: { input: '$$post_item', to: "objectId" } } ] },
+                      { $eq: [ '$user',  { $convert: { input: req.user.id, to: "objectId" } } ] },
+                    ]
+                }
+              }
+          },
+          { $project: { id: '$_id', _id: 0 } }
+        ],
+        as: "currentUserLike"
+      }
+    },
+
+    { 
+      $project: { 
+      'id': '$_id',
+      '_id': 0,
+      'publishDate': 1,
+      'subject': 1,
+      'description': 1,
+      'imageCover': 1,
+      'distance': 1,
+      'location': 1,
+      'createdBy': 1,
+      'numberOfComments': { $size: "$posts_comments" },
+      'numberOfLikes': { $size: "$posts_likes" },
+      'currentUserLike': 1,
+      } 
+    }
   ]);
-
-  // Add distance mark M - meter / KM - kelometer  
-  const AddDistanceMark = (distance) => {
-     let newDistance = Math.round(distance);
-     if (newDistance >= 0 && newDistance < 1000) {
-      newDistance = `${newDistance}${'M'}`; 
-     } else if ( newDistance >= 1000 ) {
-      newDistance = `${newDistance}${'KM'}`;  
-     }
-     return newDistance;
-  }
-
-  distances.forEach( (post) => {
-    post.distance = AddDistanceMark(post.distance);
-    post.publishDate = dateFormat(new Date(post.publishDate), "dd/mm/yyyy h:mmtt");
-  });
 
   res.status(200).json({
     status: 'success',
-    data: {
-      data: distances,
-    },
+    data: distances,
   });
 };

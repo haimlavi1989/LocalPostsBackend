@@ -16,39 +16,44 @@ const pointSchema = new mongoose.Schema({
 
 const ObjectId = mongoose.Schema.ObjectId;
 
-const postsSchema = new mongoose.Schema({
-  subject: {
-    type: String,
-    required: [true, 'A post must have title'],
+const postsSchema = new mongoose.Schema(
+  {
+    subject: {
+      type: String,
+      required: [true, 'A post must have title'],
+    },
+    imageCover: {
+      type: String,
+      default: '',
+    },
+    images: [String],
+    description: {
+      type: String,
+      required: [true, 'A post must have text'],
+    },
+    publishDate: {
+      type: Date,
+      default: Date(),
+    },
+    location: {
+      type: pointSchema,
+      index: '2dsphere',
+    },
+    createdAt: {
+      type: Date,
+      default: Date(),
+      select: false,
+    },
+    createdBy: {
+      type: ObjectId,
+      ref: 'User',
+    }
   },
-  imageCover: {
-    type: String,
-    default: '',
-  },
-  images: [String],
-  description: {
-    type: String,
-    required: [true, 'A post must have text'],
-  },
-  publishDate: {
-    type: Date,
-    default: Date(),
-  },
-  location: {
-    type: pointSchema,
-    index: '2dsphere',
-  },
-  createdAt: {
-    type: Date,
-    default: Date(),
-    select: false,
-  },
-  createdBy: {
-    type: ObjectId,
-    ref: 'User',
-    select: false,
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
+  );
 
 const Post = mongoose.model('Post', postsSchema);
 

@@ -32,9 +32,7 @@ exports.updateOne = (Model) => async (req, res, next) => {
   
       res.status(200).json({
         status: 'success',
-        data: {
-          data: doc
-        }
+        data: doc
       });
 
     } catch (err) {
@@ -48,9 +46,7 @@ exports.createOne = (Model) => async (req, res, next) => {
 
       res.status(201).json({
         status: 'success',
-        data: {
-          data: doc
-        }
+        data: doc
       });
 
     } catch (err) {
@@ -71,9 +67,7 @@ exports.getOne = (Model, popOptions) => async (req, res, next) => {
   
       res.status(200).json({
         status: 'success',
-        data: {
-          data: doc
-        }
+        data: doc
       });
 
     } catch (err) {
@@ -81,25 +75,30 @@ exports.getOne = (Model, popOptions) => async (req, res, next) => {
     }
   };
 
-exports.getAll = (Model) => async (req, res, next) => {
-    try { 
-      const fullResoults = await Model.find().countDocuments();
-      const features = new APIFeatures(Model.find(), req.query)
+exports.getAll = (Model, popOptions) => async (req, res, next) => {
+    try {
+      
+      // To allow for nested GET comm on post (hack)
+      let filter = {};
+      if (req.params.postId) filter = { post: req.params.postId };
+
+      const fullResoults = await Model.find(filter).countDocuments();
+      const features = new APIFeatures(Model.find(filter), req.query)
         .filter()
         .sort()
         .limitFields()
         .paginate();
       // const doc = await features.query.explain();
-      const doc = await features.query;
+      let doc = features.query;
+      if (popOptions) doc = doc.populate(popOptions);
+      doc = await doc;
   
       // SEND RESPONSE
       res.status(200).json({
         status: 'success',
         fullResoults,
         results: doc.length,
-        data: {
-          data: doc
-        }
+        data: doc
       });
 
     } catch (err) {

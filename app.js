@@ -1,6 +1,8 @@
 const express = require('express');
 const postsRoutes = require('./routes/postsRoutes');
 const userRouter = require('./routes/userRoutes');
+const commentRoutes = require('./routes/commentRoutes');
+const likeRoutes = require('./routes/likeRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const helmet = require('helmet');
@@ -43,6 +45,8 @@ app.use(compression());
 // Routes
 app.use('/api/v1/posts', postsRoutes);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/comments', commentRoutes);
+app.use('/api/v1/likes', likeRoutes);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on the server`, 404));

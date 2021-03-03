@@ -3,54 +3,60 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'A user must have a name'],
-  },
-  email: {
-    type: String,
-    required: [true, 'A user must have an email'],
-    unique: true,
-    lowercase: true,
-    validate: [validator.isEmail, 'Please provide a valid email'],
-  },
-  role: {
-    type: String,
-    enum: ['user', 'gust', 'admin'],
-    default: 'user',
-  },
-  photo: {
-    type: String,
-    default: '',
-  },
-  password: {
-    type: String,
-    required: [true, 'Please provide a password'],
-    minlength: 6,
-    select: false,
-  },
-  passwordConfirm: {
-    type: String,
-    required: [true, 'A user must confirm the password'],
-    select: false,
-    validate: {
-      // This only works on CREATE and SAVE!!!
-      validator: function (el) {
-        return el === this.password;
-      },
-      message: 'Passwords are not the same!',
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'A user must have a name'],
     },
+    email: {
+      type: String,
+      required: [true, 'A user must have an email'],
+      unique: true,
+      lowercase: true,
+      validate: [validator.isEmail, 'Please provide a valid email'],
+    },
+    role: {
+      type: String,
+      enum: ['user', 'gust', 'admin'],
+      default: 'user',
+    },
+    photo: {
+      type: String,
+      default: '',
+    },
+    password: {
+      type: String,
+      required: [true, 'Please provide a password'],
+      minlength: 6,
+      select: false,
+    },
+    passwordConfirm: {
+      type: String,
+      required: [true, 'A user must confirm the password'],
+      select: false,
+      validate: {
+        // This only works on CREATE and SAVE!!!
+        validator: function (el) {
+          return el === this.password;
+        },
+        message: 'Passwords are not the same!',
+      },
+    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+      select: false,
+    }
   },
-  passwordChangedAt: Date,
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-    select: false,
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
+);
 
 // Incrypt password
 userSchema.pre('save', async function (next) {
