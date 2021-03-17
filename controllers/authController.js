@@ -28,6 +28,23 @@ const createSendToken = (user, statusCode, req, res) => {
   });
 };
 
+const handleLoginResponse = (user, res) => {
+
+    try {
+      const token = signToken(user.id);
+      let expiresIn = process.env.JWT_EXPIRES_IN_SECONDS.slice(0, -1) * 1;
+      //  Send token to client
+      res.status(200).json({
+        status: 'success',
+        token,
+        expiresIn,
+        userId: user._id 
+      });
+    } catch (err) {
+      return next(new AppError(err, 400));
+    }
+}
+
 exports.signup = async (req, res, next) => {
   try {
     const newUser = await User.create({
@@ -37,7 +54,8 @@ exports.signup = async (req, res, next) => {
       passwordConfirm: req.body.passwordConfirm,
     });
 
-    createSendToken(newUser, 201, req, res);
+    // Let user log in after signup
+    handleLoginResponse(newUser, res);
   } catch (err) {
     return next(new AppError(err, 400));
   }
@@ -58,27 +76,19 @@ exports.login = async (req, res, next) => {
     if (!user || !(await user.comparePasswords(password, user.password))) {
       return next(new AppError('Incorrect email or password', 401));
     }
-    const token = signToken(user._id);
-    let expiresIn = process.env.JWT_EXPIRES_IN_SECONDS.slice(0, -1) * 1;
-    //  Send token to client
-    res.status(200).json({
-      status: 'success',
-      token,
-      expiresIn,
-      userId: user._id 
-    });
+    handleLoginResponse(user, res);
   } catch (err) {
     return next(new AppError(err, 400));
   }
 };
+
 
 exports.protect = async (req, res, next) => {
   try {
     // Getting token and check of it's there
     let token;
     if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer')
+      req.headers.authorization?.startsWith('Bearer')
     ) {
       token = req.headers.authorization.split(' ')[1];
     } else if (req.cookies.jwt) {
