@@ -18,7 +18,7 @@ exports.createPost = async (req, res, next) => {
       subject: req.body.subject,
       description: req.body.description,
       location: JSON.parse(req.body.location),
-      //createdBy: req.user._id
+      createdBy: req.user.id
     });
     
     req.post = await Post.create(post);
