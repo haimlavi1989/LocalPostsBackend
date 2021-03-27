@@ -43,9 +43,7 @@ exports.createPostResponse = async (req, res, next) => {
 
       res.status(201).json({
         status: 'success',
-        data: {
-          data: doc
-        }
+        data: doc
       });
 
   } catch (err) {
